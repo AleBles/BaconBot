@@ -22,7 +22,7 @@
  *  SOFTWARE.
  *
  */
- 
+
 var songleft;
 var allSongsId = [];
 var lastPlayedSongs = [];
@@ -30,6 +30,8 @@ var actionTable = {};
 var lastPlay;
 var forcePlay = false;
 var playingRandom = false;
+
+var CHA_LA_ID = 11468055;
 
 // GroovesharkUtils
 var GU = {
@@ -71,7 +73,7 @@ var GU = {
         if (attributes == undefined)
             return;
         var maxDescriptionLength = 145;
-    
+
         var defName = attributes.Description;
         defName = defName.substr(0, defName.indexOf(GUParams.prefixRename)) + GUParams.prefixRename + ' {GS Bot} ';
         if (playingRandom)
@@ -104,7 +106,7 @@ var GU = {
         if (nbr > GUParams.maxSongPreview)
             nbr = GUParams.maxSongPreview;
         songs = GU.getPlaylistNextSongs();
-        
+
         var i = -1;
         var string = '';
         while (++i <= nbr)
@@ -225,7 +227,7 @@ var GU = {
             listToRemove.forEach(function(element) {
                 string = string + element.SongName + ' ~ From: ' + element.AlbumName + GUParams.separator;
             });
-            GU.sendMsg(string.substring(0, string.length - GUParams.separator.length));            
+            GU.sendMsg(string.substring(0, string.length - GUParams.separator.length));
         }
     },
  'removeByName': function(message, stringFilter)
@@ -250,7 +252,7 @@ var GU = {
             GU.sendMsg('Only Guests can use that feature, sorry!');
             return false;
         }
-        return true;    
+        return true;
     },
  'inListCheck': function(current, list)
     {
@@ -271,7 +273,7 @@ var GU = {
         {
             return true;
         }
-        GU.sendMsg('Only ' + GUParams.whiteListName + ' can use that feature, sorry!');        
+        GU.sendMsg('Only ' + GUParams.whiteListName + ' can use that feature, sorry!');
         return false;
     },
  'ownerCheck': function(current)
@@ -281,7 +283,7 @@ var GU = {
             GU.sendMsg('Only the Master can use that feature, sorry!');
             return false;
         }
-        return true;    
+        return true;
     },
  'doParseMessage': function(current)
     {
@@ -364,7 +366,7 @@ var GU = {
  'guest': function(current)
     {
         var userID = current.find('a.favorite').attr('data-user-id');
-        
+
         if (GS.getCurrentBroadcast().getPermissionsForUserID(userID) != undefined) // is guest
             GS.Services.SWF.broadcastRemoveVIPUser(userID);
         else
@@ -377,6 +379,10 @@ var GU = {
  'about': function()
     {
         GU.sendMsg('This broadcast is currently running "Grooveshark Broadcast Bot" v' + GUParams.version + ', created by grooveshark.com/uman42 . Extensions: goo.gl/v4YW7b (google), goo.gl/aAX4dr (firefox), goo.gl/gR3YfW (source code)');
+    },
+ 'bacon': function ()
+    {
+        Grooveshark.addSongsByID([CHA_LA_ID]);
     },
  'help': function(message, parameter)
     {
@@ -450,6 +456,7 @@ actionTable = {
     'peek':                [[GU.inBroadcast, GU.whiteListCheck], GU.previewSongs,        '[NUMBER] - Preview the songs that are in the queue.'],
     'guest':               [[GU.inBroadcast, GU.whiteListCheck], GU.guest,               '- Toogle your guest status.'],
     'about':               [[GU.inBroadcast],                    GU.about,               '- About this software.']
+    'bacon':               [[GU.inBroadcast, GU.guestCheck],     GU.bacon,               '- About this software.']
 };
 
 if (GUParams.userReq != '' && GUParams.passReq != '')
