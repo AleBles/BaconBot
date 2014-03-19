@@ -455,7 +455,7 @@ actionTable = {
     'shuffle':             [[GU.inBroadcast, GU.guestCheck],     GU.shuffle,             '- Shuffle the current queue.'],
     'peek':                [[GU.inBroadcast, GU.whiteListCheck], GU.previewSongs,        '[NUMBER] - Preview the songs that are in the queue.'],
     'guest':               [[GU.inBroadcast, GU.whiteListCheck], GU.guest,               '- Toogle your guest status.'],
-    'about':               [[GU.inBroadcast],                    GU.about,               '- About this software.']
+    'about':               [[GU.inBroadcast],                    GU.about,               '- About this software.'],
     'bacon':               [[GU.inBroadcast, GU.guestCheck],     GU.bacon,               '- About this software.']
 };
 
