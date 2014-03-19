@@ -374,7 +374,7 @@ var GU = {
     },
  'ping': function()
     {
-        GU.sendMsg('Ping resp!');
+        GU.sendMsg('Pong!');
     },
  'about': function()
     {
