@@ -439,6 +439,91 @@ var GU = {
                 setTimeout(GU.startBroadcasting, 3000, bc);
             });
         }
+    },
+	 'kick': function()
+    {
+        if(Math.floor((Math.random()*10)+1) > 5)
+            GU.sendMsg('Kicking people is bad!');
+        else
+            GU.sendMsg('You should be ashamed of yourself.');   
+    },
+    'chuck': function()
+    {
+        var obj;
+        var ret = GM_xmlhttpRequest({
+            method: "GET",
+            url: "http://api.icndb.com/jokes/random",
+            onload: function(res) {
+                obj = jQuery.parseJSON(res.responseText);
+                GU.sendMsg(obj.value.joke);
+            }
+        });
+    },
+    'pokedex': function(message,parameter)
+    {
+        var obj;
+        var ret = GM_xmlhttpRequest({
+            method: "GET",
+            url: "http://pokeapi.co/api/v1/pokemon/"+parameter+"/",
+            onload: function(res) {
+                obj = jQuery.parseJSON(res.responseText);
+                GU.sendMsg(obj.name + " " + obj.species);
+            }
+        });
+    },
+    'anime': function(message,parameter)
+    {
+        var obj;
+        var parser;
+        var xmlDoc;
+        var ret = GM_xmlhttpRequest({
+            method: "GET",
+            url: "http://myanimelist.net/api/anime/search.xml?q="+parameter,
+            onload: function(res) {
+                obj = res.responseText;
+                if (window.DOMParser)
+                {
+                    parser=new DOMParser();
+                    xmlDoc=parser.parseFromString(obj,"text/xml");
+                }
+                else // Internet Explorer
+                {
+                    xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+                    xmlDoc.async=false;
+                    xmlDoc.loadXML(obj);
+                }
+                GU.sendMsg(xmlDoc.getElementsByTagName("synopsis")[0].childNodes[0].nodeValue);
+            }
+        });     
+    },
+    'manga': function(message,parameter)
+    {
+        var obj;
+        var parser;
+        var xmlDoc;
+        var ret = GM_xmlhttpRequest({
+            method: "GET",
+            url: "http://myanimelist.net/api/manga/search.xml?q="+parameter,
+            onload: function(res) {
+                obj = res.responseText;
+                if (window.DOMParser)
+                {
+                    parser=new DOMParser();
+                    xmlDoc=parser.parseFromString(obj,"text/xml");
+                }
+                else // Internet Explorer
+                {
+                    xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+                    xmlDoc.async=false;
+                    xmlDoc.loadXML(obj);
+                }
+                GU.sendMsg(xmlDoc.getElementsByTagName("synopsis")[0].childNodes[0].nodeValue);
+            }
+        });     
+    },
+    'bacon': function()
+    {
+        GU.sendMsg('http://investorplace.com/wp-content/uploads/2014/02/bacon.jpg');
     }
 };
 
@@ -456,7 +541,12 @@ actionTable = {
     'peek':                [[GU.inBroadcast, GU.whiteListCheck], GU.previewSongs,        '[NUMBER] - Preview the songs that are in the queue.'],
     'guest':               [[GU.inBroadcast, GU.whiteListCheck], GU.guest,               '- Toogle your guest status.'],
     'about':               [[GU.inBroadcast],                    GU.about,               '- About this software.'],
-    'bacon':               [[GU.inBroadcast, GU.guestCheck],     GU.bacon,               '- About this software.']
+	'kick':                [[GU.inBroadcast],                    GU.kick,                '- kicking is bad.'],
+    'bacon':               [[GU.inBroadcast],                    GU.bacon,               '- bacon is bacon.'],
+    'pokedex':             [[GU.inBroadcast],                    GU.pokedex,             '- All hail the helix fossil.'],
+    'anime':               [[GU.inBroadcast],                    GU.anime,               '- MyAnimeList Api'],
+    'manga':               [[GU.inBroadcast],                    GU.manga,               '- MyAnimeList Api'],
+    'chuck':               [[GU.inBroadcast],                    GU.chuck,               '- Say chuck stuff.']
 };
 
 if (GUParams.userReq != '' && GUParams.passReq != '')
